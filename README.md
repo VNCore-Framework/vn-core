@@ -1,2 +1,2 @@
-# vn-core
-VNCore heart of atomic
+## 🚀 About Me
+VNCore được làm dựa theo es_extended và qb-core nhưng sẽ hướng đến việc tối ưu hơn trong tương lai nhằm loại bỏ những thứ dư thừa gây nặng nề cache lưu trữ trong máy chủ và hỗ trợ việc convert các script từ qbcore và esx sang VNCore dễ dàng hơn

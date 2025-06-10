@@ -1,0 +1,1 @@
+VNCore = exports["vn-core"]:GetCore()

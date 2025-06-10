@@ -1,7 +1,13 @@
-local Server = lib.class('server_core')
+VNCore.Players = {}
+VNCore.Jobs = Shared.Jobs
 
-function Server:constructor()
-    
-end
+RegisterNetEvent("vncore:joined", function()
+    local _source = source
+    while not next(VNCore.Jobs) do
+        Wait(50)
+    end
 
-server = Server:new()
+    if not VNCore.Players[_source] then
+        
+    end
+end)
