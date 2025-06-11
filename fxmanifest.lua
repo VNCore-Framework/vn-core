@@ -12,18 +12,22 @@ shared_scripts {
     '@ox_lib/init.lua',
     'shared/shared.lua',
     'shared/main.lua',
+    'shared/functions.lua',
     'shared/jobs.lua',
 }
 
 client_scripts {
     'client/main.lua',
     'client/functions.lua',
+    'client/events.lua',
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    'server/player.lua',
     'server/main.lua',
     'server/functions.lua',
+    'server/events.lua',
 }
 
 files {

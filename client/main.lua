@@ -2,6 +2,11 @@ VNCore.PlayerData = {}
 VNCore.PlayerLoaded = false
 VNCore.playerId = PlayerId()
 VNCore.serverId = GetPlayerServerId(VNCore.playerId)
+VNCore.Game = {}
+VNCore.Streaming = {}
+
+Core = {}
+Core.Events = {}
 
 CreateThread(function()
     while true do
@@ -14,4 +19,8 @@ CreateThread(function()
             break
         end
     end
+end)
+
+RegisterCommand('coords', function()
+    print(GetEntityCoords(PlayerPedId()))
 end)
