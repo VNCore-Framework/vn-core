@@ -44,7 +44,7 @@ function LoadAccount(source, identifier, isNew)
         local index = #userData.accounts + 1
         userData.accounts[index] = {
             name = account,
-            accounts = accounts[account] or Shared.StartingAccountMoney[account] or 0,
+            money = accounts[account] or Shared.StartingAccountMoney[account] or 0,
             label = data.label,
             index = index,
         }
@@ -81,7 +81,7 @@ function CreateAccount(source, identifier)
         identifier 
     }
 
-    MySQL.prepare("INSERT INTO `users` SET `name` = ?,`accounts` = ?, `identifier` = ?", parameters, function()
+    MySQL.prepare("INSERT INTO `users` SET `name` = ?, `accounts` = ?, `identifier` = ?", parameters, function()
         LoadAccount(source, identifier, true)
     end)
 end

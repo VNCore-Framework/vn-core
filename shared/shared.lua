@@ -8,6 +8,9 @@ Shared.Accounts = {
     money = {
         label = 'Money',
     },
+    bank = {
+        label = 'Bank',
+    },
 }
 
 Shared.DefaultSpawns = {
