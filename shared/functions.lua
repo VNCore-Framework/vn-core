@@ -1,3 +1,5 @@
+VNCore.Math = {}
+
 function VNCore.DumpTable(table, nb)
     if nb == nil then
         nb = 0
@@ -27,5 +29,14 @@ function VNCore.DumpTable(table, nb)
         return s .. "}"
     else
         return tostring(table)
+    end
+end
+
+function VNCore.Math.Round(value, numDecimalPlaces)
+    if numDecimalPlaces then
+        local power = 10 ^ numDecimalPlaces
+        return math.floor((value * power) + 0.5) / power
+    else
+        return math.floor(value + 0.5)
     end
 end

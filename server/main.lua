@@ -1,11 +1,3 @@
-VNCore.Players = {}
-VNCore.Jobs = Shared.Jobs
-VNCore.Items = {}
-
-Core = {}
-Core.playersByIdentifier = {}
-Core.Events = {}
-
 function onPlayerJoined(playerId)
     local identifier = VNCore.GetIdentifier(playerId)
     if not identifier then
@@ -65,6 +57,11 @@ function LoadAccount(source, identifier, isNew)
 
     TriggerEvent("vncore:loaded", source, xPlayer, isNew)
     xPlayer.triggerEvent("vncore:loaded", userData, isNew)
+
+    if setPlayerInventory then
+        print('pass')
+        setPlayerInventory(source, xPlayer, userData.inventory, isNew)
+    end
     print(('[^2INFO^0] Player ^5"%s"^0 has connected to the server. ID: ^5%s^7'):format(xPlayer.getName(), source))
 end
 

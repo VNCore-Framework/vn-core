@@ -3,6 +3,7 @@ Shared = Shared or {}
 Shared.CustomInventory = 'ox'
 
 Shared.StartingAccountMoney = { bank = 50000 }
+Shared.maxWeight = 15000
 
 Shared.Accounts = {
     money = {
@@ -10,6 +11,9 @@ Shared.Accounts = {
     },
     bank = {
         label = 'Bank',
+    },
+    black_money = {
+        label = 'Bkack money',
     },
 }
 

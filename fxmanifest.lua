@@ -24,9 +24,12 @@ client_scripts {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    'server/player.lua',
-    'server/main.lua',
+    'server/common.lua',
+    'server/bridge/ox_inventory.lua',
     'server/functions.lua',
+    'server/player.lua',
+    'server/modules/*.lua',
+    'server/main.lua',
     'server/events.lua',
 }
 

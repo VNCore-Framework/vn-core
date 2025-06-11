@@ -2,6 +2,18 @@ VNCore.SecureNetEvent('vncore:updatePlayerData', function(key, val)
 	VNCore.SetPlayerData(key, val)
 end)
 
+VNCore.SecureNetEvent("esx:setAccountMoney", function(account)
+    for i = 1, #VNCore.PlayerData.accounts do
+        if VNCore.PlayerData.accounts[i].name == account.name then
+            VNCore.PlayerData.accounts[i] = account
+            break
+        end
+    end
+
+    VNCore.SetPlayerData("accounts", VNCore.PlayerData.accounts)
+end)
+
+
 RegisterNetEvent("vncore:loaded", function(xPlayer, _)
     VNCore.PlayerData = xPlayer
 

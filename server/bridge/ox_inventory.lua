@@ -1,5 +1,3 @@
-if Shared.CustomInventoryy ~= "ox" then return end
-
 MySQL.ready(function()
     TriggerEvent("__cfx_export_ox_inventory_Items", function(ref)
         if ref then
