@@ -32,10 +32,9 @@ function LoadAccount(source, identifier, isNew)
         accounts = {},
         inventory = {},
         metadata = {},
-        skin = {}
     }
 
-    local result = MySQL.prepare.await("SELECT `name`, `accounts`, `inventory`, `metadata`, `position` FROM `users` WHERE identifier = ?", { identifier })
+    local result = MySQL.prepare.await("SELECT `name`, `accounts`, `inventory`, `metadata`, `position`, `skin` FROM `users` WHERE identifier = ?", { identifier })
 
     local accounts = result.accounts
     accounts = (accounts and accounts ~= "") and json.decode(accounts) or {}
@@ -54,7 +53,7 @@ function LoadAccount(source, identifier, isNew)
     userData.name = result.name ~= "" and result.name or GetPlayerName(source)
     userData.inventory = json.decode(result.inventory) or {}
     userData.metadata = (result.metadata and result.metadata ~= "") and json.decode(result.metadata) or {}
-    userData.position = json.decode(result.position) or Shared.DefaultSpawns[math.random(1, #Shared.DefaultSpawns)]
+    userData.position = result.position and json.decode(result.position) or Shared.DefaultSpawns[math.random(1, #Shared.DefaultSpawns)]
     userData.skin = result.skin and json.decode(result.skin) or {
         sex = 0
     }
@@ -76,10 +75,14 @@ function CreateAccount(source, identifier)
         accounts[account] = money
     end
 
-    local parameters = { GetPlayerName(source), json.encode(accounts), identifier }
+    local parameters = { 
+        GetPlayerName(source), 
+        json.encode(accounts), 
+        identifier 
+    }
 
     MySQL.prepare("INSERT INTO `users` SET `name` = ?,`accounts` = ?, `identifier` = ?", parameters, function()
-        LoadAccount(identifier, playerId, true)
+        LoadAccount(source, identifier, true)
     end)
 end
 
