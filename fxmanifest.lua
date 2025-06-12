@@ -12,8 +12,8 @@ shared_scripts {
     '@ox_lib/init.lua',
     'shared/shared.lua',
     'shared/main.lua',
-    'shared/modules/*.lua',
     'shared/functions.lua',
+    'shared/modules/*.lua',
     'shared/jobs.lua',
 }
 

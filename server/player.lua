@@ -25,7 +25,6 @@ function createPlayerData(source, identifier, name, accounts, inventory, metadat
     end
 
     function self.getAccounts(minimal)
-        print(json.encode(self.accounts))
         if not minimal then
             return self.accounts
         end
@@ -33,7 +32,6 @@ function createPlayerData(source, identifier, name, accounts, inventory, metadat
         for i = 1, #self.accounts do
             minimalAccounts[self.accounts[i].name] = self.accounts[i].money
         end
-        print(json.encode(minimalAccounts))
         return minimalAccounts
     end
 

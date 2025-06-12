@@ -20,7 +20,3 @@ CreateThread(function()
         end
     end
 end)
-
-RegisterCommand('coords', function()
-    print(GetEntityCoords(PlayerPedId()))
-end)
