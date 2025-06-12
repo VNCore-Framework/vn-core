@@ -22,11 +22,12 @@ function LoadAccount(source, identifier, isNew)
         identifier = identifier,
         name = GetPlayerName(source),
         accounts = {},
+        roles = {},
         inventory = {},
         metadata = {},
     }
 
-    local result = MySQL.prepare.await("SELECT `name`, `accounts`, `inventory`, `metadata`, `position`, `skin` FROM `vn_users` WHERE identifier = ?", { identifier })
+    local result = MySQL.prepare.await("SELECT `name`, `accounts`, `roles`, `inventory`, `metadata`, `position`, `skin` FROM `vn_users` WHERE identifier = ?", { identifier })
 
     local accounts = result.accounts
     accounts = (accounts and accounts ~= "") and json.decode(accounts) or {}
@@ -42,6 +43,8 @@ function LoadAccount(source, identifier, isNew)
         }
     end
 
+    userData.roles = json.decode(result.roles)
+
     userData.name = result.name ~= "" and result.name or GetPlayerName(source)
     userData.inventory = json.decode(result.inventory) or {}
     userData.metadata = (result.metadata and result.metadata ~= "") and json.decode(result.metadata) or {}
@@ -50,7 +53,7 @@ function LoadAccount(source, identifier, isNew)
         sex = 0
     }
 
-    local xPlayer = createPlayerData(source, identifier, userData.name, userData.accounts, userData.inventory, userData.metadata, userData.position, userData.skin)
+    local xPlayer = createPlayerData(source, identifier, userData.name, userData.accounts, userData.roles, userData.inventory, userData.metadata, userData.position, userData.skin)
 
     VNCore.Players[source] = xPlayer
     Core.playersByIdentifier[identifier] = xPlayer
@@ -59,7 +62,6 @@ function LoadAccount(source, identifier, isNew)
     xPlayer.triggerEvent("vncore:loaded", userData, isNew)
 
     if setPlayerInventory then
-        print('pass')
         setPlayerInventory(source, xPlayer, userData.inventory, isNew)
     end
     print(('[^2INFO^0] Player ^5"%s"^0 has connected to the server. ID: ^5%s^7'):format(xPlayer.getName(), source))
@@ -67,18 +69,29 @@ end
 
 function CreateAccount(source, identifier)
     local accounts = {}
+    local roles = Shared.RolesTable
 
     for account, money in pairs(Shared.StartingAccountMoney) do
         accounts[account] = money
     end
 
+    for k, v in pairs(roles) do
+        roles[k].name = v.name
+        roles[k].grade = v.grade
+        roles[k].label = Shared.Jobs[v.name].label
+        roles[k].grade_label = Shared.Jobs[v.name].grades[tostring(v.grade)].name
+        roles[k].isduty = false
+        roles[k].isboss = false
+    end
+
     local parameters = { 
         GetPlayerName(source), 
         json.encode(accounts), 
+        json.encode(roles),
         identifier 
     }
 
-    MySQL.prepare("INSERT INTO `vn_users` SET `name` = ?, `accounts` = ?, `identifier` = ?", parameters, function()
+    MySQL.prepare("INSERT INTO `vn_users` SET `name` = ?, `accounts` = ?, `roles` = ?, `identifier` = ?", parameters, function()
         LoadAccount(source, identifier, true)
     end)
 end

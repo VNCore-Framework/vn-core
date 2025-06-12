@@ -13,6 +13,13 @@ VNCore.SecureNetEvent("vncore:setAccountMoney", function(account)
     VNCore.SetPlayerData("accounts", VNCore.PlayerData.accounts)
 end)
 
+VNCore.SecureNetEvent("vncore:setRole", function(name, role, lastRole)
+    local currentRole = VNCore.PlayerData
+
+    currentRole[name] = role
+
+    ESX.SetPlayerData("roles", currentRole)
+end)
 
 RegisterNetEvent("vncore:loaded", function(xPlayer, _)
     VNCore.PlayerData = xPlayer

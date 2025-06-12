@@ -1,3 +1,11 @@
+function VNCore.IsPlayerLoaded()
+    return VNCore.PlayerLoaded
+end
+
+function VNCore.GetPlayerData()
+    return VNCore.PlayerData
+end
+
 function VNCore.DisableSpawnManager()
     if GetResourceState("spawnmanager") == "started" then
         exports.spawnmanager:setAutoSpawn(false)

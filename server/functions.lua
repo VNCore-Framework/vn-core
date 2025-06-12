@@ -116,10 +116,11 @@ function Core.SavePlayer(xPlayer, cb)
 
     updateHealthAndArmorInMetadata(xPlayer)
     MySQL.prepare(
-        "UPDATE `vn_users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
+        "UPDATE `vn_users` SET `name` = ?, `accounts` = ?, `roles` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
         {
             xPlayer.getName(),
             json.encode(xPlayer.getAccounts(true)),
+            json.encode(xPlayer.getRoles()),
             json.encode(xPlayer.getCoords(false, true)),
             json.encode(xPlayer.getInventory(true)),
             json.encode(xPlayer.getMeta()),
@@ -151,6 +152,7 @@ function Core.SavePlayers(cb)
         parameters[#parameters + 1] = {
             xPlayer.getName(),
             json.encode(xPlayer.getAccounts(true)),
+            json.encode(xPlayer.getRoles()),
             json.encode(xPlayer.getCoords(false, true)),
             json.encode(xPlayer.getInventory(true)),
             json.encode(xPlayer.getMeta()),
@@ -160,7 +162,7 @@ function Core.SavePlayers(cb)
     end
 
     MySQL.prepare(
-        "UPDATE `vn_users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
+        "UPDATE `vn_users` SET `name` = ?, `accounts` = ?, `roles` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
         parameters,
         function(results)
             if not results then

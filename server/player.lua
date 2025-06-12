@@ -1,16 +1,17 @@
-function createPlayerData(source, identifier, name, accounts, inventory, metadata, position, skin)
+function createPlayerData(source, identifier, name, accounts, roles, inventory, metadata, position, skin)
     local self = {}
 
     self.source = source
     self.identifier = identifier
     self.name = name
     self.accounts = accounts
+    self.roles = roles
     self.metadata = metadata
     self.position = position
     self.inventory = inventory
     self.skin = skin
     self.maxWeight = Shared.MaxWeight
-
+    
     function self.getIdentifier()
         return self.identifier
     end
@@ -313,6 +314,46 @@ function createPlayerData(source, identifier, name, accounts, inventory, metadat
     function self.setMaxWeight(newWeight)
         self.maxWeight = newWeight
         self.triggerEvent("vncore:setMaxWeight", self.maxWeight)
+    end
+
+    function self.getRoles()
+        return self.roles
+    end
+
+    function self.getRole(name)
+        return self.roles[name]
+    end
+
+    function self.setRole(name, role, grade)
+        local newRole = Shared.Jobs[role]
+        if newRole then
+            if newRole.grades[tostring(grade)] then
+                local lastRole = self.roles[name]
+                self.roles[name].name = role
+                self.roles[name].grade = grade
+                self.roles[name].label = newRole.label
+                self.roles[name].grade_label = newRole.grades[tostring(grade)].name
+                self.roles[name].isduty = newRole.grades[tostring(grade)].isduty
+                self.roles[name].isboss = newRole.grades[tostring(grade)].isboss
+                TriggerEvent("vncore:setRole", self.source, name, self.roles[name], lastRole)
+                self.triggerEvent("vncore:setRole", name, self.roles[name], lastRole)
+                return true
+            else
+                return false 
+            end
+        else
+            return false 
+        end
+    end
+
+    function self.setDuty(name, status)
+        if self.roles[name] then
+            self.roles[name].isduty = status
+
+            return true
+        else
+            return false
+        end
     end
 
     for _, funcs in pairs(Core.PlayerFunctionOverrides) do

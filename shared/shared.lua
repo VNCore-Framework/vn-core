@@ -17,7 +17,8 @@ Shared.Accounts = {
     },
 }
 
-Shared.JobTables = {
+-- mặc định tài khoản khi tạo sẽ có table job như này
+Shared.RolesTable = {
     job = {
         name = 'unemployed',
         grade = 0
