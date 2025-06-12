@@ -18,7 +18,7 @@ VNCore.SecureNetEvent("vncore:setRole", function(name, role, lastRole)
 
     currentRole[name] = role
 
-    ESX.SetPlayerData("roles", currentRole)
+    VNCore.SetPlayerData("roles", currentRole)
 end)
 
 RegisterNetEvent("vncore:loaded", function(xPlayer, _)
@@ -61,4 +61,8 @@ end
 AddEventHandler("playerSpawned", onPlayerSpawn)
 AddEventHandler("vncore:onPlayerSpawn", function()
     onPlayerSpawn()
+end)
+
+RegisterNetEvent('vncore:Notify', function(msg, notifyType, time, title)
+    VNCore.Notify(msg, notifyType, time, title)
 end)

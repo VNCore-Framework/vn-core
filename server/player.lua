@@ -330,7 +330,7 @@ function createPlayerData(source, identifier, name, accounts, roles, inventory, 
             if newRole.grades[tostring(grade)] then
                 local lastRole = self.roles[name]
                 self.roles[name].name = role
-                self.roles[name].grade = grade
+                self.roles[name].grade = tonumber(grade)
                 self.roles[name].label = newRole.label
                 self.roles[name].grade_label = newRole.grades[tostring(grade)].name
                 self.roles[name].isduty = newRole.grades[tostring(grade)].isduty
@@ -354,6 +354,10 @@ function createPlayerData(source, identifier, name, accounts, roles, inventory, 
         else
             return false
         end
+    end
+
+    function self.Notify(msg, notifyType, time, title)
+        self.triggerEvent("vncore:Notify", msg, notifyType, time, title)
     end
 
     for _, funcs in pairs(Core.PlayerFunctionOverrides) do

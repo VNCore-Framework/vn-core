@@ -75,14 +75,6 @@ function VNCore.SetPlayerFunctionOverride(index)
 end
 
 function VNCore.Cmd(commandName, properties, cb)
-    if type(commandName) ~= 'string' then
-        error('VNCore.Cmd: command phải là chuỗi')
-    end
-
-    if type(cb) ~= 'function' then
-        error('VNCore.Cmd: callback phải là hàm')
-    end
-
     lib.addCommand(commandName, properties, cb)
 end
 
@@ -109,7 +101,7 @@ local function updateHealthAndArmorInMetadata(xPlayer)
     xPlayer.setMeta("armor", GetPedArmour(ped))
 end
 
-function Core.SavePlayer(xPlayer, cb)
+function Core.SavePlayer(xPlayer, cb, debug)
     if not xPlayer.spawned then
         return cb and cb()
     end
@@ -128,7 +120,7 @@ function Core.SavePlayer(xPlayer, cb)
             xPlayer.identifier,
         },
         function(affectedRows)
-            if affectedRows == 1 then
+            if affectedRows == 1 and debug then
                 print(('[^2INFO^7] Saved player ^5"%s^7"'):format(xPlayer.name))
             end
             if cb then
@@ -144,36 +136,9 @@ function Core.SavePlayers(cb)
         return
     end
 
-    local startTime <const> = os.time()
-    local parameters = {}
-
     for _, xPlayer in pairs(VNCore.Players) do
-        updateHealthAndArmorInMetadata(xPlayer)
-        parameters[#parameters + 1] = {
-            xPlayer.getName(),
-            json.encode(xPlayer.getAccounts(true)),
-            json.encode(xPlayer.getRoles()),
-            json.encode(xPlayer.getCoords(false, true)),
-            json.encode(xPlayer.getInventory(true)),
-            json.encode(xPlayer.getMeta()),
-            json.encode(xPlayer.getSkin()),
-            xPlayer.identifier,
-        }
+        Core.SavePlayer(xPlayer)
     end
 
-    MySQL.prepare(
-        "UPDATE `vn_users` SET `name` = ?, `accounts` = ?, `roles` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
-        parameters,
-        function(results)
-            if not results then
-                return
-            end
-
-            if type(cb) == "function" then
-                return cb()
-            end
-
-            print(("[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms"):format(#parameters, #parameters > 1 and "players" or "player", VNCore.Math.Round((os.time() - startTime) / 1000000, 2)))
-        end
-    )
+    print('[^2INFO^7] Saved all player')
 end

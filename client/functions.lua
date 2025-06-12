@@ -89,6 +89,16 @@ function VNCore.SecureNetEvent(name, func)
     Core.Events[invokingResource][eventIndex] = event
 end
 
+function VNCore.Notify(msg, notifyType, time, title)
+    lib.notify({
+        title = title or 'Thông báo',
+        description = msg,
+        showDuration = true,
+        type = notifyType or 'inform',
+        duration = time or 3000
+    })
+end
+
 function VNCore.Game.Teleport(entity, coords, cb)
 
     if DoesEntityExist(entity) then
