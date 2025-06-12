@@ -2,7 +2,7 @@ VNCore.SecureNetEvent('vncore:updatePlayerData', function(key, val)
 	VNCore.SetPlayerData(key, val)
 end)
 
-VNCore.SecureNetEvent("esx:setAccountMoney", function(account)
+VNCore.SecureNetEvent("vncore:setAccountMoney", function(account)
     for i = 1, #VNCore.PlayerData.accounts do
         if VNCore.PlayerData.accounts[i].name == account.name then
             VNCore.PlayerData.accounts[i] = account
@@ -16,8 +16,6 @@ end)
 
 RegisterNetEvent("vncore:loaded", function(xPlayer, _)
     VNCore.PlayerData = xPlayer
-
-    print('VNCore.PlayerData.position', json.encode(VNCore.PlayerData.position))
     
     VNCore.SpawnPlayer(VNCore.PlayerData.skin, VNCore.PlayerData.position, function()
         TriggerEvent("vncore:onPlayerSpawn")

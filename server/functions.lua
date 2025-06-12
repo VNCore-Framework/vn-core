@@ -62,11 +62,47 @@ function VNCore.SetPlayerFunctionOverride(index)
     Config.PlayerFunctionOverride = index
 end
 
+function VNCore.RegisterPlayerFunctionOverrides(index, overrides)
+    Core.PlayerFunctionOverrides[index] = overrides
+end
+
+function VNCore.SetPlayerFunctionOverride(index)
+    if not index or not Core.PlayerFunctionOverrides[index] then
+        return print("[^3WARNING^7] No valid index provided.")
+    end
+
+    Config.PlayerFunctionOverride = index
+end
+
+function VNCore.GetJobs()
+    return VNCore.Jobs
+end
+
+function VNCore.DoesJobExist(job, grade)
+    return (VNCore.Jobs[job] and VNCore.Jobs[job].grades[tostring(grade)] ~= nil) or false
+end
+
+function Core.IsPlayerAdmin(playerId)
+    playerId = tostring(playerId)
+    if (IsPlayerAceAllowed(playerId, "command") or GetConvar("sv_lan", "") == "true") then
+        return true
+    end
+
+    return false
+end
+
+local function updateHealthAndArmorInMetadata(xPlayer)
+    local ped = GetPlayerPed(xPlayer.source)
+    xPlayer.setMeta("health", GetEntityHealth(ped))
+    xPlayer.setMeta("armor", GetPedArmour(ped))
+end
+
 function Core.SavePlayer(xPlayer, cb)
     if not xPlayer.spawned then
         return cb and cb()
     end
 
+    updateHealthAndArmorInMetadata(xPlayer)
     MySQL.prepare(
         "UPDATE `users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
         {
@@ -85,6 +121,45 @@ function Core.SavePlayer(xPlayer, cb)
             if cb then
                 cb()
             end
+        end
+    )
+end
+
+function Core.SavePlayers(cb)
+    local xPlayers <const> = VNCore.Players
+    if not next(xPlayers) then
+        return
+    end
+
+    local startTime <const> = os.time()
+    local parameters = {}
+
+    for _, xPlayer in pairs(VNCore.Players) do
+        updateHealthAndArmorInMetadata(xPlayer)
+        parameters[#parameters + 1] = {
+            xPlayer.getName(),
+            json.encode(xPlayer.getAccounts(true)),
+            json.encode(xPlayer.getCoords(false, true)),
+            json.encode(xPlayer.getInventory(true)),
+            json.encode(xPlayer.getMeta()),
+            json.encode(xPlayer.getSkin()),
+            xPlayer.identifier,
+        }
+    end
+
+    MySQL.prepare(
+        "UPDATE `users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
+        parameters,
+        function(results)
+            if not results then
+                return
+            end
+
+            if type(cb) == "function" then
+                return cb()
+            end
+
+            print(("[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms"):format(#parameters, #parameters > 1 and "players" or "player", VNCore.Math.Round((os.time() - startTime) / 1000000, 2)))
         end
     )
 end

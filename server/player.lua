@@ -290,7 +290,7 @@ function createPlayerData(source, identifier, name, accounts, inventory, metadat
 
     function self.setMoney(money)
         assert(type(money) == "number", "money should be number!")
-        money = ESX.Math.Round(money)
+        money = VNCore.Math.Round(money)
         self.setAccountMoney("money", money)
     end
 
