@@ -74,6 +74,18 @@ function VNCore.SetPlayerFunctionOverride(index)
     Config.PlayerFunctionOverride = index
 end
 
+function VNCore.Cmd(commandName, properties, cb)
+    if type(commandName) ~= 'string' then
+        error('VNCore.Cmd: command phải là chuỗi')
+    end
+
+    if type(cb) ~= 'function' then
+        error('VNCore.Cmd: callback phải là hàm')
+    end
+
+    lib.addCommand(commandName, properties, cb)
+end
+
 function VNCore.GetJobs()
     return VNCore.Jobs
 end

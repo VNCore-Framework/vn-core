@@ -32,6 +32,7 @@ server_scripts {
     'server/modules/*.lua',
     'server/main.lua',
     'server/events.lua',
+    'server/commands.lua',
 }
 
 files {
