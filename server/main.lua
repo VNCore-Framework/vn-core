@@ -7,7 +7,7 @@ function onPlayerJoined(playerId)
     if VNCore.GetPlayerFromIdentifier(identifier) then
         DropPlayer(playerId, "Có ai đó đang sử dụng tài khoản của bạn")
     else
-        local result = MySQL.scalar.await("SELECT 1 FROM users WHERE identifier = ?", { identifier })
+        local result = MySQL.scalar.await("SELECT 1 FROM vn_users WHERE identifier = ?", { identifier })
         if result then
             LoadAccount(playerId, identifier)
         else
@@ -26,7 +26,7 @@ function LoadAccount(source, identifier, isNew)
         metadata = {},
     }
 
-    local result = MySQL.prepare.await("SELECT `name`, `accounts`, `inventory`, `metadata`, `position`, `skin` FROM `users` WHERE identifier = ?", { identifier })
+    local result = MySQL.prepare.await("SELECT `name`, `accounts`, `inventory`, `metadata`, `position`, `skin` FROM `vn_users` WHERE identifier = ?", { identifier })
 
     local accounts = result.accounts
     accounts = (accounts and accounts ~= "") and json.decode(accounts) or {}
@@ -78,7 +78,7 @@ function CreateAccount(source, identifier)
         identifier 
     }
 
-    MySQL.prepare("INSERT INTO `users` SET `name` = ?, `accounts` = ?, `identifier` = ?", parameters, function()
+    MySQL.prepare("INSERT INTO `vn_users` SET `name` = ?, `accounts` = ?, `identifier` = ?", parameters, function()
         LoadAccount(source, identifier, true)
     end)
 end

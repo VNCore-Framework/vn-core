@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `vn_users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `identifier` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,

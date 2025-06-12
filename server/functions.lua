@@ -116,7 +116,7 @@ function Core.SavePlayer(xPlayer, cb)
 
     updateHealthAndArmorInMetadata(xPlayer)
     MySQL.prepare(
-        "UPDATE `users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
+        "UPDATE `vn_users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
         {
             xPlayer.getName(),
             json.encode(xPlayer.getAccounts(true)),
@@ -160,7 +160,7 @@ function Core.SavePlayers(cb)
     end
 
     MySQL.prepare(
-        "UPDATE `users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
+        "UPDATE `vn_users` SET `name` = ?, `accounts` = ?, `position` = ?, `inventory` = ?, `metadata` = ?, `skin` = ? WHERE `identifier` = ?",
         parameters,
         function(results)
             if not results then
