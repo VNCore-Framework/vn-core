@@ -3,7 +3,7 @@ VNCore.Cmd('saveall', {
     params = {},
     restricted = 'group.admin'
 }, function(source, args)
-    Core.SavePlayers(function() end)
+    Core.SavePlayers()
 end)
 
 VNCore.Cmd('save', {
